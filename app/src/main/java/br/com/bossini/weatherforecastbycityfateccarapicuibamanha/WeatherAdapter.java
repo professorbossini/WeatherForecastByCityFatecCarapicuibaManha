@@ -24,8 +24,20 @@ public class WeatherAdapter extends ArrayAdapter <Weather> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Weather caraDaVez = getItem(position);
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.list_item, parent, false);
-        TextView lowTextView = view.findViewById(R.id.lowTextView);
-        return null;
+        View raiz = inflater.inflate(R.layout.list_item, parent, false);
+        TextView dayTextView = raiz.findViewById(R.id.dayTextView);
+        TextView lowTextView = raiz.findViewById(R.id.lowTextView);
+        TextView highTextView = raiz.findViewById(R.id.highTextView);
+        TextView humidityTextView = raiz.findViewById(R.id.humidityTextView);
+        dayTextView.setText(context.
+                getString(R.string.day_description, caraDaVez.dayOfWeek,
+                        caraDaVez.description));
+        lowTextView.setText(context.
+                getString(R.string.low_temp, caraDaVez.minTemp));
+        highTextView.setText(context.
+                getString(R.string.high_temp, caraDaVez.maxTemp));
+        humidityTextView.setText(context.
+                getString(R.string.humidity, caraDaVez.humidity));
+        return raiz;
     }
 }
