@@ -28,7 +28,7 @@ public class Weather {
         agora.setTimeInMillis(timeStamp * 1000);
         TimeZone timeZone = TimeZone.getDefault();
         agora.add(Calendar.MILLISECOND, timeZone.getOffset(agora.getTimeInMillis()));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE HH:mm", Locale.getDefault());
         return simpleDateFormat.format(agora.getTime());
     }
 }
