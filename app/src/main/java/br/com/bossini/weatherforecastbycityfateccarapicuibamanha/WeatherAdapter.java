@@ -33,29 +33,43 @@ public class WeatherAdapter extends ArrayAdapter <Weather> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Weather caraDaVez = getItem(position);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View raiz = inflater.inflate(R.layout.list_item, parent, false);
-        TextView dayTextView = raiz.findViewById(R.id.dayTextView);
-        TextView lowTextView = raiz.findViewById(R.id.lowTextView);
-        TextView highTextView = raiz.findViewById(R.id.highTextView);
-        TextView humidityTextView = raiz.findViewById(R.id.humidityTextView);
-        ImageView conditionImageView = raiz.findViewById(R.id.conditionImageView);
+        ViewHolder viewHolder = null;
+        if (convertView == null){
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(R.layout.list_item, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.conditionImageView = convertView.findViewById(R.id.conditionImageView);
+            viewHolder.dayTextView = convertView.findViewById(R.id.dayTextView);
+            viewHolder.lowTextView = convertView.findViewById(R.id.lowTextView);
+            viewHolder.highTextView = convertView.findViewById(R.id.highTextView);
+            viewHolder.humidityTextView = convertView.findViewById(R.id.humidityTextView);
+            convertView.setTag(viewHolder);
+        }
+        viewHolder = (ViewHolder) convertView.getTag();
         if (cacheDeFiguras.containsKey(caraDaVez.iconName)){
-            conditionImageView.setImageBitmap(cacheDeFiguras.get(caraDaVez.iconName));
+            viewHolder.conditionImageView.setImageBitmap(cacheDeFiguras.get(caraDaVez.iconName));
         }
         else{
-            new BaixaImagem(conditionImageView, caraDaVez.iconName).execute(context.getString(R.string.image_download_url, caraDaVez.iconName));
+            new BaixaImagem(viewHolder.conditionImageView, caraDaVez.iconName).execute(context.getString(R.string.image_download_url, caraDaVez.iconName));
         }
-        dayTextView.setText(context.
+        viewHolder.dayTextView.setText(context.
                 getString(R.string.day_description, caraDaVez.dayOfWeek,
                         caraDaVez.description));
-        lowTextView.setText(context.
+        viewHolder.lowTextView.setText(context.
                 getString(R.string.low_temp, caraDaVez.minTemp));
-        highTextView.setText(context.
+        viewHolder.highTextView.setText(context.
                 getString(R.string.high_temp, caraDaVez.maxTemp));
-        humidityTextView.setText(context.
+        viewHolder.humidityTextView.setText(context.
                 getString(R.string.humidity, caraDaVez.humidity));
-        return raiz;
+        return convertView;
+    }
+
+    private class ViewHolder{
+        public ImageView conditionImageView;
+        public TextView dayTextView;
+        public TextView lowTextView;
+        public TextView highTextView;
+        public TextView humidityTextView;
     }
 
     private class BaixaImagem extends AsyncTask <String, Void, Bitmap>{
